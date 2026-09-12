@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoAlpha ML | Corporate Environmental Score Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Navigation Header -->
+    <header class="app-header">
+      <div class="brand-group">
+        <div class="brand-badge">
+          <span class="pulse-dot"></span>
+          <span class="badge-text">ML PRODUCTION ENGINE</span>
+        </div>
+        <h1 class="brand-title">
+          <span class="gradient-text">EcoAlpha</span> Intelligence
+        </h1>
+        <p class="brand-subtitle">Predicting Corporate Environmental Scores from Authentic Financial Fundamentals</p>
+      </div>
+
+      <div class="header-actions">
+        <div class="status-pill">
+          <span class="status-indicator"></span>
+          <span>Sustainalytics & SEC EDGAR Ground Truth</span>
+        </div>
+        <button id="themeToggleBtn" class="action-btn" title="Toggle Mode">🌙</button>
+      </div>
+    </header>
+
+    <!-- Top Key Stat Metric Strip -->
+    <section class="stat-strip">
+      <div class="stat-card">
+        <div class="stat-icon">📈</div>
+        <div class="stat-content">
+          <span class="stat-value" id="statObservations">2,450</span>
+          <span class="stat-label">Corporate Filings</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏛️</div>
+        <div class="stat-content">
+          <span class="stat-value" id="statCompanies">279</span>
+          <span class="stat-label">S&P 500 Enterprises</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌐</div>
+        <div class="stat-content">
+          <span class="stat-value" id="statSectors">39</span>
+          <span class="stat-label">Industry Sectors</span>
+        </div>
+      </div>
+      <div class="stat-card highlight">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-content">
+          <span class="stat-value">67.0%</span>
+          <span class="stat-label">Explained Variance (R²)</span>
+        </div>
+      </div>
+      <div class="stat-card highlight-green">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-content">
+          <span class="stat-value">±5.9 pts</span>
+          <span class="stat-label">Mean Absolute Error</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="nav-tab active" data-tab="simulator">⚡ "What-If" Green Simulator</button>
+      <button class="nav-tab" data-tab="explorer">🏢 S&P 500 Company Explorer</button>
+      <button class="nav-tab" data-tab="benchmarks">📊 Model Benchmark & Evaluation</button>
+      <button class="nav-tab" data-tab="features">🔍 Feature Importance & Drivers</button>
+      <button class="nav-tab" data-tab="casestudies">📑 Flagship Case Studies</button>
+    </nav>
+
+    <!-- TAB 1: What-If Green Simulator -->
+    <section id="tab-simulator" class="tab-pane active">
+      <div class="simulator-grid">
+        <!-- Controls Panel -->
+        <div class="card controls-card">
+          <div class="card-header">
+            <h3>🎛️ Financial Profile Inputs</h3>
+            <span class="card-tag">Interactive Inference</span>
+          </div>
+          <p class="section-desc">Adjust corporate financial indicators to predict real-time environmental score shift.</p>
+
+          <div class="input-form">
+            <!-- Sector Selector -->
+            <div class="form-group">
+              <label for="simSector">Industry Sector</label>
+              <select id="simSector" class="form-select">
+                <option value="Software & Services">Software & Services (Tech)</option>
+                <option value="Utilities">Utilities (Energy & Power)</option>
+                <option value="Oil & Gas Producers">Oil & Gas Producers</option>
+                <option value="Pharmaceuticals">Pharmaceuticals & Biotech</option>
+                <option value="Automobiles">Automobiles & Components</option>
+                <option value="Diversified Financials">Diversified Financials</option>
+                <option value="Retailing">Retailing & Consumer Goods</option>
+                <option value="Industrial Conglomerates">Industrial Conglomerates</option>
+              </select>
+            </div>
+
+            <!-- Operating Margin Slider -->
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Operating Margin (EBIT Margin)</span>
+                <span class="slider-val" id="valOpMargin">25.0%</span>
+              </div>
+              <input type="range" id="simOpMargin" min="2" max="55" step="0.5" value="25">
+              <span class="slider-hint">Reflects operational profitability and efficiency</span>
+            </div>
+
+            <!-- Capital Intensity Slider -->
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Capital Intensity (Assets / Revenue)</span>
+                <span class="slider-val" id="valCapInt">1.20x</span>
+              </div>
+              <input type="range" id="simCapInt" min="0.3" max="5.0" step="0.05" value="1.2">
+              <span class="slider-hint">Heavy physical plant vs asset-light service footprint</span>
+            </div>
+
+            <!-- Cash Flow Margin Slider -->
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Cash Flow Margin (Operating Cash / Revenue)</span>
+                <span class="slider-val" id="valCashMargin">20.0%</span>
+              </div>
+              <input type="range" id="simCashMargin" min="1" max="45" step="0.5" value="20">
+              <span class="slider-hint">Liquidity slack available for green capital expenditure</span>
+            </div>
+
+            <!-- Debt to Assets Slider -->
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Debt to Total Assets Ratio</span>
+                <span class="slider-val" id="valDebtAssets">45.0%</span>
+              </div>
+              <input type="range" id="simDebtAssets" min="10" max="85" step="1" value="45">
+              <span class="slider-hint">Leverage burden and debt crowding effects</span>
+            </div>
+
+            <!-- Asset Turnover Slider -->
+            <div class="slider-group">
+              <div class="slider-label">
+                <span>Asset Turnover Ratio</span>
+                <span class="slider-val" id="valAssetTurnover">0.85x</span>
+              </div>
+              <input type="range" id="simAssetTurnover" min="0.2" max="3.0" step="0.05" value="0.85">
+              <span class="slider-hint">Revenue generated per dollar of asset deployment</span>
+            </div>
+
+            <!-- Revenue Scale Selector -->
+            <div class="form-group">
+              <label for="simRevenue">Corporate Revenue Scale (USD)</label>
+              <select id="simRevenue" class="form-select">
+                <option value="5000000000">$5 Billion (Mid-Cap Public)</option>
+                <option value="25000000000" selected>$25 Billion (Large-Cap S&P 500)</option>
+                <option value="100000000000">$100 Billion (Mega-Cap Global)</option>
+                <option value="350000000000">$350 Billion (Titan Scale)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output Scorecard Panel -->
+        <div class="card result-card">
+          <div class="card-header">
+            <h3>🌱 Environmental Score Prediction</h3>
+            <span id="tierBadge" class="tier-pill leader">Leader</span>
+          </div>
+
+          <div class="score-display">
+            <div class="gauge-container">
+              <svg class="gauge-svg" viewBox="0 0 200 200">
+                <circle class="gauge-bg" cx="100" cy="100" r="80"></circle>
+                <circle id="gaugeProgress" class="gauge-progress" cx="100" cy="100" r="80"></circle>
+              </svg>
+              <div class="gauge-text">
+                <span id="scoreValue" class="score-num">68.4</span>
+                <span class="score-sub">/ 100</span>
+              </div>
+            </div>
+            <p id="tierDesc" class="score-desc">High Environmental Performance (Top Tier) — Strong ESG posture and decarbonization readiness.</p>
+          </div>
+
+          <!-- Radar Chart of Financial Balance -->
+          <div class="radar-container">
+            <h4>Financial Profile Radar vs Sector Mean</h4>
+            <div class="chart-wrapper">
+              <canvas id="simRadarChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Key Contributing Factors List -->
+          <div class="drivers-box">
+            <h4>Key Model Contributing Factors</h4>
+            <div id="driversList" class="drivers-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Company Explorer -->
+    <section id="tab-explorer" class="tab-pane">
+      <div class="card">
+        <div class="card-header explorer-header">
+          <div>
+            <h3>🏢 S&P 500 Corporate ESG Database</h3>
+            <p class="section-desc">Search and analyze authentic Sustainalytics environmental ratings across 279 corporations.</p>
+          </div>
+          <div class="search-filter-group">
+            <input type="text" id="companySearchInput" placeholder="🔍 Search company or ticker (e.g. AAPL, XOM, NEE)..." class="search-input">
+            <select id="sectorFilterSelect" class="search-select">
+              <option value="ALL">All Sectors</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table" id="companiesTable">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Company Name</th>
+                <th>Sector</th>
+                <th>Actual Env Score</th>
+                <th>Operating Margin</th>
+                <th>Capital Intensity</th>
+                <th>Cash Margin</th>
+                <th>Debt/Assets</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="companiesTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Model Benchmark & Evaluation -->
+    <section id="tab-benchmarks" class="tab-pane">
+      <div class="benchmark-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>📊 5-Fold Cross-Validation Model Leaderboard</h3>
+            <span class="card-tag">Rigorously Evaluated</span>
+          </div>
+          <p class="section-desc">Comparison of Regularized Linear Baselines, Random Forest, HistGradientBoosting, Tabular Neural Network, and Blended Ensemble.</p>
+          
+          <div class="table-responsive">
+            <table class="benchmark-table" id="benchmarkTable">
+              <thead>
+                <tr>
+                  <th>Model Architecture</th>
+                  <th>R² Score</th>
+                  <th>MAE (pts)</th>
+                  <th>RMSE (pts)</th>
+                  <th>Pearson r</th>
+                  <th>Within 5 pts</th>
+                  <th>Within 10 pts</th>
+                </tr>
+              </thead>
+              <tbody id="benchmarkTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>🎯 Generalization to Unseen Corporations</h3>
+            <span class="card-tag">GroupKFold Validation</span>
+          </div>
+          <p class="section-desc">Zero-shot out-of-sample transfer evaluation grouped by corporate Ticker (unseen companies during training):</p>
+          <div class="unseen-stats-grid" id="unseenStatsGrid">
+            <!-- Dynamically populated -->
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="benchmarkBarChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Feature Importance & Drivers -->
+    <section id="tab-features" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <h3>🔍 Permutation Feature Importance & Economic Mechanics</h3>
+          <span class="card-tag">Explainable AI</span>
+        </div>
+        <p class="section-desc">Identifies which financial indicators possess the highest predictive sensitivity for corporate environmental performance.</p>
+
+        <div class="chart-wrapper-large">
+          <canvas id="featuresBarChart"></canvas>
+        </div>
+
+        <div class="economic-cards-grid">
+          <div class="eco-card">
+            <h4>1. Financial Slack & Cash Flow Margin</h4>
+            <p>Firms with surplus operating cash flow can finance multi-year decarbonization, renewable energy PPAs, and supply chain emissions tracking without compromising solvency.</p>
+          </div>
+          <div class="eco-card">
+            <h4>2. Capital Intensity & Asset Heaviness</h4>
+            <p>Companies with vast physical plants, factories, and utility infrastructure face structural environmental compliance obligations that heavily anchor baseline scores.</p>
+          </div>
+          <div class="eco-card">
+            <h4>3. Solvency & Debt-to-Assets</h4>
+            <p>Elevated financial leverage restricts discretionary capital expenditure. Highly indebted companies prioritize debt service over voluntary environmental stewardship.</p>
+          </div>
+          <div class="eco-card">
+            <h4>4. Industry-Relative Z-Scores</h4>
+            <p>Normalizing financial health within peer groups enables the model to distinguish clean outliers in naturally carbon-heavy sectors (e.g. NextEra Energy in Utilities).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: Flagship Case Studies -->
+    <section id="tab-casestudies" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <h3>📑 Flagship Corporate Deep-Dives</h3>
+          <span class="card-tag">Real-World Case Studies</span>
+        </div>
+        <p class="section-desc">Actual vs Predicted Environmental Scores across iconic corporations with underlying economic rationales.</p>
+
+        <div class="case-studies-grid" id="caseStudiesGrid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>EcoAlpha ML Engine • Sourced from Authentic Sustainalytics ESG Ratings & SEC EDGAR 10-K Database</p>
+      <p class="footer-sub">Engineered with Python, Scikit-Learn, PyTorch, and FastAPI</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
